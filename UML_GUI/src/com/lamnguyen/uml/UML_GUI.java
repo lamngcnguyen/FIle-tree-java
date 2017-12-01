@@ -15,7 +15,6 @@ import javax.swing.*;
 public class UML_GUI extends javax.swing.JFrame {
     protected File selectedFolder;
     protected Diagram_Panel diagram;
-    FileUtils fu = new FileUtils();
     String path = "";
     
     /**
@@ -40,10 +39,8 @@ public class UML_GUI extends javax.swing.JFrame {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
-        jSplitPane2 = new javax.swing.JSplitPane();
-        jPanel1 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane(diagram);
+        splitPane = new javax.swing.JSplitPane();
+        leftPanel = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -67,38 +64,22 @@ public class UML_GUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("UML_GUI");
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jPanel1.setMinimumSize(new java.awt.Dimension(224, 394));
+        leftPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        leftPanel.setMinimumSize(new java.awt.Dimension(224, 394));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout leftPanelLayout = new javax.swing.GroupLayout(leftPanel);
+        leftPanel.setLayout(leftPanelLayout);
+        leftPanelLayout.setHorizontalGroup(
+            leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 220, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 485, Short.MAX_VALUE)
+        leftPanelLayout.setVerticalGroup(
+            leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 487, Short.MAX_VALUE)
         );
 
-        jSplitPane2.setLeftComponent(jPanel1);
-        FileTree.displayFileTree(path, jPanel1);
-
-        jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        jSplitPane2.setRightComponent(jPanel3);
-        jSplitPane2.setRightComponent(jScrollPane1);
+        splitPane.setLeftComponent(leftPanel);
+        FileTree.displayFileTree(path, leftPanel);
 
         jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -174,7 +155,7 @@ public class UML_GUI extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSplitPane2)
+                    .addComponent(splitPane)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -184,9 +165,10 @@ public class UML_GUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSplitPane2)
-                .addGap(2, 2, 2))
+                .addComponent(splitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE))
         );
+
+        splitPane.setRightComponent(diagram.getScrollPane());
 
         jTabbedPane1.addTab("Tab 1", jPanel2);
 
@@ -287,24 +269,13 @@ public class UML_GUI extends javax.swing.JFrame {
         fileChooser.setDialogTitle("Load Source");
         fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         if(fileChooser.showOpenDialog(open) == JFileChooser.APPROVE_OPTION){         
-            jPanel1.removeAll();
-            jPanel1.updateUI();
+            leftPanel.removeAll();
+            leftPanel.updateUI();
             
             path = fileChooser.getSelectedFile().getAbsolutePath();
-            FileTree.displayFileTree(path, jPanel1);
-            diagram.setSelectedFile(path);
-            
-            ArrayList<File> files = fu.getAllJavaFiles(new File(path));
-            diagram.setMethodList(files);
-            ArrayList<ClassTree> classes = new ArrayList<>();
-            for (File f : files) {
-               ClassTree c = new ClassTree(f);
-               classes.add(c);
-            }
-            linkClass(classes);
-            for (ClassTree c : classes) {
-                c.showInformation();
-            }
+            FileTree.displayFileTree(path, leftPanel);
+            diagram = new Diagram_Panel(path);
+            splitPane.setRightComponent(diagram.getScrollPane());
         }
     }//GEN-LAST:event_openMenuItemActionPerformed
 
@@ -385,17 +356,15 @@ public class UML_GUI extends javax.swing.JFrame {
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JPanel leftPanel;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem openMenuItem;
     private javax.swing.JMenuItem pasteMenuItem;
     private javax.swing.JMenuItem saveMenuItem;
+    private javax.swing.JSplitPane splitPane;
     // End of variables declaration//GEN-END:variables
 
 }

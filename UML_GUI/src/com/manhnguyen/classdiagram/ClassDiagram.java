@@ -19,11 +19,13 @@ public class ClassDiagram {
                 ClassTree c = classes.get(i);
                 for (int j = 0; j < classes.size(); j++) {
                     if (classes.get(j).name.equals(c.parentName)) {
-                        ClassTree x = classes.get(j);
-                        c.parent = classes.get(j);
-                        classes.set(i, c);
-                        classes.set(j, x);
-                        System.out.println("LINKED!");
+                        if(!c.getName().equals(classes.get(j).name)) {
+                            ClassTree x = classes.get(j);
+                            c.parent = classes.get(j);
+                            classes.set(i, c);
+                            classes.set(j, x);
+                            System.out.println(classes.get(j).name + " is parent of " + c.getName());
+                        }
                     }
                 }
             }
@@ -35,14 +37,14 @@ public class ClassDiagram {
      */
     public static void main(String[] args) {
         FileUtils fu = new FileUtils();
-        ArrayList<File> files = fu.getAllJavaFiles(new File("."));
+        ArrayList<File> files = fu.getAllJavaFiles(new File("/Users/dhungc3/OneDrive/Programming/Java/int2204/Tuan6"));
         //System.out.println(new File("..").getAbsolutePath());
         ArrayList<ClassTree> classes = new ArrayList<>();
         for (File f : files) {
             ClassTree c = new ClassTree(f);
             classes.add(c);
         }
-        linkClass(classes);
+//        linkClass(classes);
         for (ClassTree c : classes) {
             c.showInformation();
         }

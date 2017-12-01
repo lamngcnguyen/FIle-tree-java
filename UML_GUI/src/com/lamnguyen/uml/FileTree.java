@@ -6,13 +6,6 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
-/**
- * @todo Menu Bar: Select folder dir and custom setting (font, font size) // done
- * @todo 4 buttons: select dir, zoom, exit
- * @todo Interactive panel for classes and methods
- * @todo Folder directory selector //done - side-panel
- * @todo (Optional) drop down menu to choose font and size
- */
 
 /**
  * Display a file system in a JTree view

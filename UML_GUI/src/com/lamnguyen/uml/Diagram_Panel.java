@@ -5,41 +5,60 @@ import java.util.ArrayList;
 import javax.swing.*;
 import com.manhnguyen.classdiagram.*;
 import java.io.File;
-/**
- * TODO: use Graphics library to draw rectangles containing file informations
- * TODO: draw lines between rectangles
- */
 
 /**
+ * Handle diagram drawing operation
  *
- * @author dhungc3
+ * @author Nguyen Ngoc Lam
  */
+public class Diagram_Panel extends JPanel {
 
-public class Diagram_Panel extends JPanel{
     private Graphics2D g2d;
     private final double scale;
-    private ArrayList<File> methodList;
-    private String selectedFile;
-    
+    private final JScrollPane scrollpane;
+    private File selectedFolder;
+    private ArrayList<File> files;
+    private ArrayList<Rectangle> nodeList;
+    private ArrayList<ClassTree> classes;
+    private int nodeHeight;
+    private int nodeWidth;
+    private int nodeX;
+    private int nodeY;
+    private int space;
+    FileUtils fu = new FileUtils();
+
     private final Font font;
     private final Color color;
     private String fontName;
-    private int size;
-    
-    public Diagram_Panel(String path){
-        scale = 1.0;
-        font = new Font("", Font.PLAIN, 50);
-        color = Color.BLACK;
-        methodList = new ArrayList<>();
-        selectedFile = path;
-    }
-    
-    public Graphics2D getG2d() {
-        return g2d;
-    }
 
-    public void setG2d(Graphics2D g2d) {
-        this.g2d = g2d;
+    public Diagram_Panel(String path) {
+        scale = 1.0;
+        font = new Font("", Font.PLAIN, 20);
+        color = Color.BLACK;
+        classes = new ArrayList<>();
+        if (!path.equals("")) {
+            selectedFolder = new File(path);
+            files = fu.getAllJavaFiles(selectedFolder);
+        }
+
+        nodeHeight = 25;
+        nodeWidth = 350;
+        nodeX = 30;
+        nodeY = 30;
+        space = 20;
+
+        scrollpane = new JScrollPane(this);
+        int unitIncrement = 15;
+        scrollpane.getVerticalScrollBar().setUnitIncrement(unitIncrement);
+        scrollpane.getHorizontalScrollBar().setUnitIncrement(unitIncrement);
+        // mouse wheel is for zooming
+        scrollpane.setWheelScrollingEnabled(false);
+        // disable keyboard scrolling
+        InputMap im = scrollpane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        im.put(KeyStroke.getKeyStroke("UP"), "none");
+        im.put(KeyStroke.getKeyStroke("DOWN"), "none");
+        im.put(KeyStroke.getKeyStroke("LEFT"), "none");
+        im.put(KeyStroke.getKeyStroke("RIGHT"), "none");
     }
 
     public String getFontName() {
@@ -50,56 +69,114 @@ public class Diagram_Panel extends JPanel{
         this.fontName = fontName;
     }
 
-    public void setSize(int size) {
-        this.size = size;
+    public Component getScrollPane() {
+        return scrollpane;
     }
 
-    public ArrayList<File> getMethodList() {
-        return methodList;
+    public int getNodeHeight() {
+        return nodeHeight;
     }
 
-    public void setMethodList(ArrayList<File> methodList) {
-        this.methodList = methodList;
-    }
-      
-    public String getSelectedFile() {
-        return selectedFile;
+    public void setNodeHeight(int nodeHeight) {
+        this.nodeHeight = nodeHeight;
     }
 
-    public void setSelectedFile(String selectedFile) {
-        this.selectedFile = selectedFile;
+    public int getNodeWidth() {
+        return nodeWidth;
+    }
+
+    public void setNodeWidth(int nodeWidth) {
+        this.nodeWidth = nodeWidth;
+    }
+
+    public int getNodeX() {
+        return nodeX;
+    }
+
+    public void setNodeX(int nodeX) {
+        this.nodeX = nodeX;
+    }
+
+    public int getNodeY() {
+        return nodeY;
+    }
+
+    public void setNodeY(int nodeY) {
+        this.nodeY = nodeY;
+    }
+
+    public int getSpace() {
+        return space;
+    }
+
+    public void setSpace(int space) {
+        this.space = space;
+    }
+
+    public ArrayList<ClassTree> getClasses() {
+        return classes;
+    }
+
+    public void setClasses() {
+        for (File f : files) {
+            ClassTree c = new ClassTree(f);
+            classes.add(c);
+        }
+    }
+
+    public ArrayList<Rectangle> getNodeList() {
+        return nodeList;
+    }
+
+    public void setNodeList(ArrayList<Rectangle> nodeList) {
+        this.nodeList = nodeList;
+    }
+
+    public ArrayList<Rectangle> assignNodeToClass() {
+        int X = getNodeX();
+        int Y = getNodeY();
+        for (int i = 0; i < classes.size(); i++) {
+            if (classes.size() > 0) {
+                Rectangle node = new Rectangle();
+                node.setBounds(X, Y, getNodeWidth(), getNodeHeight() * classes.size());
+                nodeList.add(node);
+                X += getNodeWidth() + getSpace();
+            }
+        }
+        return nodeList;
+    }
+
+    public void drawPanel(Graphics g) {
+        g2d = (Graphics2D) g;
+        g2d.scale(scale, scale);
+        g2d.setFont(font);
+        FontMetrics fm = g2d.getFontMetrics();
+        int tableHeight = fm.getHeight();
+
+        ArrayList<Rectangle> nodes = assignNodeToClass();
+        if (nodes != null) {
+            for (int i = 0; i < nodes.size(); i++) {
+                g2d.draw(nodes.get(i));
+                for (int j = 0; j < classes.size(); j++) {
+                    Rectangle table = new Table();
+                    table.setBounds((int) nodes.get(i).getX(), (int) nodes.get(i).getY() + nodeHeight * j, nodeWidth, nodeHeight);
+                    g2d.draw(table);
+                    g2d.setColor(color);
+                    g2d.drawString(classes.get(j).getName(), (float) table.getX() + 5, (float) table.getY() + 15);
+                    g2d.setColor(Color.BLACK);
+                }
+            }
+        }
+
+        //g2d.dispose();
+        updateUI();
     }
 
     @Override
-    protected void paintComponent(Graphics g){
+    protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         drawPanel(g);
     }
-
-    public void drawPanel(Graphics g){
-//        super.paint(g);
-        File folder = new File(getSelectedFile());
-        g2d = (Graphics2D) g;
-        ArrayList<File> methods = getMethodList();
-        FontMetrics fm = g2d.getFontMetrics();
-        String string = "Hello World";
-        
-        g2d.scale(scale, scale);
-        g2d.setFont(font);
-        g2d.setColor(color);
-
-        int x = 50;
-        int y = 50;
-        int h = fm.getHeight();
-        int w = fm.stringWidth(string);
-
-        g2d.drawRect(x, y, w, h);
-        g2d.drawString(string, x, y + h);
-        g2d.dispose();
-        
-        updateUI();
-    }
-    
 //    @Override
 //    public Dimension getPreferredSize(){
 //        return new Dimension(10000,5000);

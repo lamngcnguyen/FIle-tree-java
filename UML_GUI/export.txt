@@ -1,0 +1,208 @@
+LINKED!
+Diagram{
+
+Attribute List: 
+- layer : ArrayList<Layer>
+
+Method List: 
++ addLayer(Layer) : void
+
++ deleteAllLayers() : void
+
++ static shapeBasedLayers(Diagram, Layer) : void
+
++ numberOfLayers() : int
+
++ static main(String[]) : void
+
+DiagramTest
+
+Attribute List: 
++ di = new Diagram() : Diagram
+
++ l = new Layer(true) : Layer
+
++ sc = new Scanner(System.in) : Scanner
+
++ shapeList = l.getList() : ArrayList<Shape>
+
++ c1 = new Circle(8.4, "red") : Circle
+
++ c2 = new Circle(8.4, "black") : Circle
+
++ c3 = new Circle(8.4, "black") : Circle
+
++ t1 = new Triangle(7.4, "blue", 9.4) : Triangle
+
++ t2 = new Triangle(7.5, "white", 10.2) : Triangle
+
++ t3 = new Triangle(7.5, "white", 10.2) : Triangle
+
++ r1 = new Rectangle(6.4, "cyan", 5.1) : Rectangle
+
++ r2 = new Rectangle(6.0, "cyan", 5.1) : Rectangle
+
++ s1 = new Square(2.1, "yellow") : Square
+
++ h1 = new Hexagon(2.5, "green") : Hexagon
+
+Method List: 
++ test() : void
+
+Layer{
+
+Attribute List: 
+- shapes : ArrayList<Shape>
+
+# visible = true : boolean
+
+Method List: 
++ isVisible() : boolean
+
++ setVisible(boolean) : void
+
++ addShape(Shape) : void
+
++ numberOfShapes() : int
+
++ setList(ArrayList<Shape>) : void
+
++ getList() : ArrayList<Shape>
+
++ deleteShape(String) : void
+
++ deleteDuplicate() : void
+
+Circle
+
+Attribute List: 
+- radius : double
+
+Method List: 
++ double, String, double) : Circle(double,
+
++ getRadius() : double
+
++ setRadius(double) : void
+
++ toString() : String
+
+Hexagon
+
+Attribute List: 
+# side : double
+
+Method List: 
++ double, String, double) : Hexagon(double,
+
++ getSide() : double
+
++ setSide(double) : void
+
++ toString() : String
+
+Polygon
+
+Attribute List: 
+# numberOfSides : int
+
+Method List: 
++ double, String, int) : Polygon(double,
+
++ getNumberOfSides() : int
+
++ setNumberOfSides(int) : void
+
+Rectangle
+
+Attribute List: 
+# width : double
+
+# height : double
+
+Method List: 
++ double, String, double, double) : Rectangle(double,
+
++ getWidth() : double
+
++ setWidth(double) : void
+
++ getHeight() : double
+
++ setHeight(double) : void
+
++ toString() : String
+
+Shape{
+
+Attribute List: 
+# xAxis : double
+
+# yAxis : double
+
+# color : String
+
+Method List: 
++ double, String) : Shape(double,
+
++ getXAxis() : double
+
++ setXAxis(double) : void
+
++ getYAxis() : double
+
++ setYAxis(double) : void
+
++ getColor() : String
+
++ setColor(String) : void
+
+Square
+
+Attribute List: 
+# side : double
+
+Method List: 
++ double, String, double) : Square(double,
+
++ getSide() : double
+
++ setSide(double) : void
+
++ toString() : String
+
+Triangle
+
+Attribute List: 
+- side_1 : double
+
+- side_2 : double
+
+- side_3 : double
+
+Method List: 
++ double, String, double, double, double) : Triangle(double,
+
++ getSide_1() : double
+
++ setSide_1(double) : void
+
++ getSide_2() : double
+
++ setSide_2(double) : void
+
++ getSide_3() : double
+
++ setSide_3(double) : void
+
++ toString() : String
+
+UserInput{
+
+Attribute List: 
+There's no attribute
+
+Method List: 
++ static addShapetoLayer(String, Layer) : void
+
++ static layerVisibility(Layer, String) : void
