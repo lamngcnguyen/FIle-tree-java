@@ -23,6 +23,8 @@ public class ClassTree extends JPanel{
     ArrayList<String> methodList; // method list
     String packageName; // package name
     String parentName; // parent name 
+    ArrayList<String> rawAttributeList; 
+    ArrayList<String> rawMethodList;
     
     private final Runnable runnable; // lambda method
     
@@ -36,8 +38,10 @@ public class ClassTree extends JPanel{
         ReadingFactor fu = new ReadingFactor();
         ArrayList<String> sourceCode = fu.getSource(file);
         name = fu.findClassName(sourceCode);
-        methodList = fu.getAllFunction(file);
-        attributeList = fu.getAllAttribute(sourceCode, methodList);
+        methodList = fu.getAllFunction(sourceCode);
+        attributeList = fu.getAllAttribute(sourceCode);
+        rawMethodList = methodList;
+        rawAttributeList = attributeList;
         fu.remakeVisibilityMember(methodList);
         fu.remakeVisibilityMember(attributeList); 
         parentName = fu.getClassParent(sourceCode);
@@ -57,6 +61,10 @@ public class ClassTree extends JPanel{
         JScrollPane scrollpane = new JScrollPane();
         scrollpane.getViewport().add(tree);
         add(BorderLayout.CENTER, scrollpane);
+        
+        for (String s : sourceCode) {
+        	System.out.println(s);
+        }
     }
     
     private DefaultMutableTreeNode addNodes(){
@@ -103,6 +111,16 @@ public class ClassTree extends JPanel{
      */
     public void testForShowParams(String x, String s, String m, String t, String m2){
         
+    }
+    
+    /**
+     * Search for function
+     * @param searchedString searched string
+     * @return string declaration
+     */
+    public String searchForFunction(String searchedString) {
+    	ReadingFactor rf = new ReadingFactor();
+    	return rf.findFunctionByName(rawAttributeList, searchedString);
     }
     
 }

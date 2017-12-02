@@ -14,6 +14,7 @@ public class ClassDiagram {
      * @param classes
      */
     public static void linkClass(ArrayList<ClassTree> classes) {
+    	String testString = "{";
         for (int i = 0; i < classes.size(); i++) {
             if (classes.get(i).parentName != null) {
                 ClassTree c = classes.get(i);
@@ -37,17 +38,21 @@ public class ClassDiagram {
      */
     public static void main(String[] args) {
         FileUtils fu = new FileUtils();
-        ArrayList<File> files = fu.getAllJavaFiles(new File("/Users/dhungc3/OneDrive/Programming/Java/int2204/Tuan6"));
-        //System.out.println(new File("..").getAbsolutePath());
+        ArrayList<File> files = fu.getAllJavaFiles(new File("C:\\Users\\manhd\\Documents\\Java\\Java_UML\\UML_GUI\\src\\com\\manhnguyen\\classdiagram"));
+        /*System.out.println(new File("..").getAbsolutePath());
         ArrayList<ClassTree> classes = new ArrayList<>();
         for (File f : files) {
             ClassTree c = new ClassTree(f);
             classes.add(c);
         }
-//        linkClass(classes);
+        //linkClass(classes);
         for (ClassTree c : classes) {
             c.showInformation();
-        }
+        }*/
+        File f = new File("C:\\Users\\manhd\\Documents\\Java\\Java_UML\\UML_GUI\\src\\com\\manhnguyen\\classdiagram\\ClassDiagram.java");
+        ClassTree c = new ClassTree(f);
+        c.showInformation();
+        System.out.println(c.searchForFunction("linkClass (ArrayList<ClassTree>"));
     }
     
 }
