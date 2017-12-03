@@ -14,7 +14,7 @@ public class UML_GUI {
 	private static ToolBar toolBar;
 	private static MenuBar menuBar;
 	private static Project_Tree project_tree;
-	private static DrawPanel drawPanel;
+	private static DiagramPanel diagramPanel;
 
 	/**
 	 * Main UML window getter
@@ -36,8 +36,8 @@ public class UML_GUI {
 	 * Project draw panel getter
 	 * @return the project draw panel to be drawn in the drawGUI() method
 	 */
-	public static DrawPanel getDrawPanel(){
-		return drawPanel;
+	public static DiagramPanel getDiagramPanel(){
+		return diagramPanel;
 	}
 
 	/**
@@ -49,10 +49,11 @@ public class UML_GUI {
 		toolBar = ToolBar.getToolBar();
 		project_tree = new Project_Tree();
 		project_tree.setMinimumSize(new Dimension(240, 240));
-		drawPanel = new DrawPanel();
-		drawPanel.setMinimumSize(new Dimension(240,240));
+		diagramPanel = new DiagramPanel();
+		diagramPanel.setMinimumSize(new Dimension(240,240));
 
-		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, project_tree, drawPanel);
+
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, project_tree, diagramPanel);
 
 		UMLWindow.add(toolBar, BorderLayout.PAGE_START);
 		UMLWindow.add(splitPane, BorderLayout.CENTER);

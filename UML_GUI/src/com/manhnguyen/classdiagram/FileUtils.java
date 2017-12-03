@@ -9,6 +9,14 @@ import java.io.*;
  * @author Nguyen Duc Manh
  */
 public class FileUtils {
+	
+	public FileUtils() {
+		
+	}
+	
+	public FileUtils(String s, int x, int ss) {
+		
+	}
     
     /**
      * Get extension of file 

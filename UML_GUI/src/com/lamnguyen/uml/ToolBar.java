@@ -152,7 +152,7 @@ public class ToolBar extends JToolBar{
      */
     private void re_draw(){
         try {
-            DrawPanel dp = UML_GUI.getDrawPanel();
+            DiagramPanel dp = UML_GUI.getDiagramPanel();
             Diagram diagram = dp.getDiagram();
             diagram.clearAll();
             drawGUI();
@@ -187,7 +187,7 @@ public class ToolBar extends JToolBar{
         ArrayList<ClassTree> classes = setClasses(selectedPath);
 
         UML_GUI.getProjectTree().draw(classes, folderName);
-        UML_GUI.getDrawPanel().draw(classes);
+        UML_GUI.getDiagramPanel().draw(classes);
 
         UML_GUI.getUMLWindow().revalidate();
         UML_GUI.getUMLWindow().repaint();

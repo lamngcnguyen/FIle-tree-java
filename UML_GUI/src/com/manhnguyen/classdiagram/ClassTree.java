@@ -13,19 +13,20 @@ import javax.swing.tree.DefaultMutableTreeNode;
  * Class tree represents
  * @author Nguyen Duc Manh
  */
-public class ClassTree extends JPanel{
+public class ClassTree{
 
     String name; // name of class
-    ClassTree parent; // null if class doesnt implement or extend anything
+    ClassTree parent; // null if class doesn't implement or extend anything
     ArrayList<ClassTree> children; // children list of class
     File source; // source code of class
     ArrayList<String> attributeList; // attribute list
     ArrayList<String> methodList; // method list
     String packageName; // package name
     String parentName; // parent name
-    ArrayList<String> rawAttributeList;
-    ArrayList<String> rawMethodList;
+    ArrayList<String> rawAttributeList; // attribute list in raw code
+    ArrayList<String> rawMethodList; // method list in raw code
     ArrayList<String> formatedSourceCode; // formatted source code. after removing function command lines and every shit lines which we dont need
+    public ArrayList<String> objectAttributeList; // object attribute list
 
 
     private final Runnable runnable; // lambda method
@@ -69,25 +70,6 @@ public class ClassTree extends JPanel{
         parentName = fu.getClassParent(sourceCode);
         parent = null;
         formatedSourceCode = sourceCode;
-        // Make a tree list with all the nodes, and make it a JTree
-        JTree tree = new JTree(addNodes());
-
-        // Add a listener
-        tree.addTreeSelectionListener((TreeSelectionEvent e) -> {
-            DefaultMutableTreeNode node;
-            node = (DefaultMutableTreeNode) e
-                    .getPath().getLastPathComponent();
-            System.out.println("You selected " + node);
-        });
-
-        // Lastly, put the JTree into a JScrollPane.
-        JScrollPane scrollpane = new JScrollPane();
-        scrollpane.getViewport().add(tree);
-        add(BorderLayout.CENTER, scrollpane);
-
-        for (String s : sourceCode) {
-            System.out.println(s);
-        }
     }
 
     private DefaultMutableTreeNode addNodes(){

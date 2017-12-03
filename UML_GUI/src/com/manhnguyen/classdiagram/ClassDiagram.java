@@ -8,6 +8,8 @@ import java.io.*;
  * @author Manh Nguyen
  */
 public class ClassDiagram {
+	
+	ClassTree x; // test attribute
 
     /**
      * Search for function information
@@ -69,6 +71,41 @@ public class ClassDiagram {
         }
         return result;
     }
+    
+    /**
+     * Check Has-A relationship of a project
+     * @param classes class list
+     */
+    public void checkHasARelationship(ArrayList<ClassTree> classes) {
+    	ArrayList<String> classNameList = new ArrayList<>();
+    	ArrayList<ArrayList<String>> attrList = new ArrayList<>();
+    	for (ClassTree c : classes) {
+    		classNameList.add(c.name);
+    		ArrayList<String> attributeNameList = new ArrayList<>();
+    		for (String s : c.attributeList) {
+    			attributeNameList.add(s.substring(s.indexOf(":") + 2, s.length()));
+    		}
+    		attrList.add(attributeNameList);
+    		for (String s : attributeNameList) {
+    			System.out.println(s);
+    		}
+    	}
+    	for (int i = 0; i < classes.size(); i++) {
+    		ArrayList<String> objectList = new ArrayList<>();
+    		ArrayList<String> attrTypeList = attrList.get(i);
+    		for (String s : attrTypeList) {
+    			if (objectList.contains(s)) {
+    				continue;
+    			}
+    			if (classNameList.contains(s)) {
+    				objectList.add(s);
+    			}
+    		}
+    		ClassTree newClass = classes.get(i);
+    		newClass.objectAttributeList = objectList;
+    		classes.set(i, newClass);
+    	}
+    }
 
     /**
      * Make relationship between classes
@@ -101,21 +138,30 @@ public class ClassDiagram {
      */
     public static void main(String[] args) {
         FileUtils fu = new FileUtils();
-        ArrayList<File> files = fu.getAllJavaFiles(new File("."));
-        System.out.println(new File(".").getAbsolutePath());
+        ArrayList<File> files = fu.getAllJavaFiles(new File("C:\\Users\\lam\\OneDrive\\Programming\\Java\\int2204\\Tuan6"));
+        System.out.println(new File("C:\\Users\\lam\\OneDrive\\Programming\\Java\\int2204\\Tuan6").getAbsolutePath());
         ArrayList<ClassTree> classes = new ArrayList<>();
         for (File f : files) {
             ClassTree c = new ClassTree(f);
             classes.add(c);
+            System.out.println(c.showInformation());
         }
         ClassDiagram cd = new ClassDiagram();
+        cd.checkHasARelationship(classes);
         System.out.println("Func : " + cd.searchForFunction(classes, "main()"));
         System.out.println("Atri : " + cd.searchForAttribute(classes, "name"));
-        //linkClass(classes);
-//        File f = new File("/Users/dhungc3/OneDrive/Programming/Java/int2204/Tuan6/");
-//        ClassTree c = new ClassTree(f);
-//        c.showInformation();
-//        System.out.println(c.searchForFunction("linkClass (ArrayList<ClassTree>"));
+        for (ClassTree c : classes) {
+        	System.out.print(c.name + ": ");
+        	for (String s : c.objectAttributeList) {
+        		System.out.print(s + " ");
+        	}
+        	System.out.println();
+        }
+        linkClass(classes);
+        File f = new File("/Users/dhungc3/OneDrive/Programming/Java/int2204/Tuan6/");
+        ClassTree c = new ClassTree(f);
+        c.showInformation();
+        System.out.println(c.searchForFunction("linkClass (ArrayList<ClassTree>"));
     }
 
 }

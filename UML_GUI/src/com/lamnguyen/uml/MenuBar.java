@@ -8,7 +8,6 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.plaf.basic.BasicMenuBarUI;
 
 import javax.imageio.*;
-import javax.tools.Tool;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -39,6 +38,7 @@ public class MenuBar extends JMenuBar {
     private JMenu subMenuWindow_Themes;
 
     private JMenuItem menuHelp_About;
+    private JMenuItem menuHelp_Description;
 
     /**
      * MenuBar constructor
@@ -59,6 +59,7 @@ public class MenuBar extends JMenuBar {
         menuTool_FindFunction = new JMenuItem("Find Function");
 
         menuHelp_About = new JMenuItem("About");
+        menuHelp_Description = new JMenuItem("Bullet point description");
 
         this.setUI(new BasicMenuBarUI());
 
@@ -91,6 +92,7 @@ public class MenuBar extends JMenuBar {
         menuTool.add(menuTool_FindAttribute);
         menuTool.add(menuTool_FindFunction);
 
+        menuHelp.add(menuHelp_Description);
         menuHelp.add(menuHelp_About);
     }
 
@@ -111,6 +113,8 @@ public class MenuBar extends JMenuBar {
         menuTool_FindAttribute.addActionListener(e -> toolBarFunctions.findAttribute());
         //Tool > Find Function listener
         menuTool_FindFunction.addActionListener(e -> toolBarFunctions.findFunction());
+        //Help > Bullet point description listener
+        menuHelp_Description.addActionListener(e -> displayDescriptionPanel());
         //Help > About listener
         menuHelp_About.addActionListener(e -> displayAboutPanel());
     }
@@ -276,7 +280,7 @@ public class MenuBar extends JMenuBar {
             if (!file.getName().toLowerCase().endsWith("." + ext))
                 file = new File(file.getParentFile(), file.getName() + "." + ext);
             try {
-                BufferedImage img = UML_GUI.getDrawPanel().getDiagram().createImage(BufferedImage.TYPE_INT_RGB);
+                BufferedImage img = UML_GUI.getDiagramPanel().getDiagram().createImage(BufferedImage.TYPE_INT_RGB);
                 try {
                     ImageIO.write(img, ext, file);
                 } catch (IOException e) {
@@ -297,5 +301,13 @@ public class MenuBar extends JMenuBar {
                 "\nClass: K61 - CA - CLC2\nUniversity of Engineering and Technology - VNU\n " +
                 "\nThis program uses MindFusion's JDiagram library\nhttps://www.mindfusion.eu/java-pack.html";
         JOptionPane.showMessageDialog(null, info, "About", JOptionPane.INFORMATION_MESSAGE);
+    }
+    /**
+     * Display the description panel
+     */
+    private void displayDescriptionPanel(){
+        String description = "At the start of each cell, there are a few bullet points\n" + "Here's what they mean\n\n" + "' + ' Public attribute or function\n"
+                + "' - ' Private attribute or function\n" + "' # ' Protected attribute or function\n";
+        JOptionPane.showMessageDialog(null, description, "Description", JOptionPane.INFORMATION_MESSAGE);
     }
 }
