@@ -6,7 +6,7 @@ import java.io.*;
 /**
  * File utils represents
  * 
- * @author Manh Nguyen
+ * @author Nguyen Duc Manh
  */
 public class FileUtils {
     

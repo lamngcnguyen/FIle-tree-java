@@ -14,7 +14,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
  * @author Nguyen Duc Manh
  */
 public class ClassTree extends JPanel{
-    
+
     String name; // name of class
     ClassTree parent; // null if class doesnt implement or extend anything
     ArrayList<ClassTree> children; // children list of class
@@ -22,15 +22,37 @@ public class ClassTree extends JPanel{
     ArrayList<String> attributeList; // attribute list
     ArrayList<String> methodList; // method list
     String packageName; // package name
-    String parentName; // parent name 
-    ArrayList<String> rawAttributeList; 
+    String parentName; // parent name
+    ArrayList<String> rawAttributeList;
     ArrayList<String> rawMethodList;
-    
+    ArrayList<String> formatedSourceCode; // formatted source code. after removing function command lines and every shit lines which we dont need
+
+
     private final Runnable runnable; // lambda method
-    
+
+    public String getName() {
+        return name;
+    }
+
+    public ArrayList<ClassTree> getChildren() {
+        return children;
+    }
+
+    public String getParentName(){
+        return parentName;
+    }
+
+    public ArrayList<String> getAttributeList() {
+        return attributeList;
+    }
+
+    public ArrayList<String> getMethodList() {
+        return methodList;
+    }
+
     /**
      * Specify constructor with param
-     * @param file source code 
+     * @param file source code
      */
     public ClassTree(File file) {
         this.runnable = System.out::println;
@@ -43,9 +65,10 @@ public class ClassTree extends JPanel{
         rawMethodList = methodList;
         rawAttributeList = attributeList;
         fu.remakeVisibilityMember(methodList);
-        fu.remakeVisibilityMember(attributeList); 
+        fu.remakeVisibilityMember(attributeList);
         parentName = fu.getClassParent(sourceCode);
         parent = null;
+        formatedSourceCode = sourceCode;
         // Make a tree list with all the nodes, and make it a JTree
         JTree tree = new JTree(addNodes());
 
@@ -61,66 +84,75 @@ public class ClassTree extends JPanel{
         JScrollPane scrollpane = new JScrollPane();
         scrollpane.getViewport().add(tree);
         add(BorderLayout.CENTER, scrollpane);
-        
+
         for (String s : sourceCode) {
-        	System.out.println(s);
+            System.out.println(s);
         }
     }
-    
+
     private DefaultMutableTreeNode addNodes(){
         String s = new String();
         DefaultMutableTreeNode classInfo = new DefaultMutableTreeNode(s);
-        
+
         return classInfo;
     }
-    
-    /**
-     * Show information of class
-     */
-    public void showInformation() {
-        System.out.println(name);
-        runnable.run();
-        System.out.println("Attribute List: ");
-        if (attributeList.isEmpty()) {
-            System.out.println("There's no attribute");
-            runnable.run();
-        } else {
-            attributeList.stream().map((s) -> {
-                System.out.println(s);
-                return s;
-            }).forEachOrdered((_item) -> {
-                runnable.run();
-            });
-        }
-        System.out.println("Method List: ");
-        if (methodList.isEmpty()) {
-            System.out.println("There's no method");
-            runnable.run();
-        } else {
-            methodList.stream().map((s) -> {
-                System.out.println(s);
-                return s;
-            }).forEachOrdered((_item) -> {
-                runnable.run();
-            });
-        }
-    }
-    
-    /**
-     * Just a test-purpose method
-     */
-    public void testForShowParams(String x, String s, String m, String t, String m2){
-        
-    }
-    
+
     /**
      * Search for function
      * @param searchedString searched string
      * @return string declaration
      */
     public String searchForFunction(String searchedString) {
-    	ReadingFactor rf = new ReadingFactor();
-    	return rf.findFunctionByName(rawAttributeList, searchedString);
+        ReadingFactor rf = new ReadingFactor();
+        return rf.findFunctionByName(rawAttributeList, searchedString);
     }
-    
+
+
+    /**
+     * Show information of class
+     */
+    public String showInformation() {
+        StringBuilder export = new StringBuilder();
+
+        export.append(name + "\n");
+        export.append("\n");
+        export.append("Parent: ");
+        export.append(parentName);
+        export.append("\n");
+        export.append("Attribute List: \n");
+        if (attributeList.isEmpty()) {
+            export.append("There's no attribute");
+            export.append("\n");
+        } else {
+            attributeList.stream().map((s) -> {
+                export.append(s);
+                return s;
+            }).forEachOrdered((_item) -> {
+                export.append("\n");
+            });
+        }
+        export.append("Method List: \n");
+        if (methodList.isEmpty()) {
+            export.append("There's no method");
+            export.append("\n");
+        } else {
+            methodList.stream().map((s) -> {
+                export.append(s);
+                return s;
+            }).forEachOrdered((_item) -> {
+                export.append("\n");
+            });
+        }
+        export.append("\n");
+        return export.toString();
+    }
+
+
+    /**
+     * Just a test-purpose method
+     */
+    public void testForShowParams(String x, String s, String m, String t, String m2){
+
+    }
+
 }
